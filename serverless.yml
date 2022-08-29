@@ -1,0 +1,37 @@
+service: disgrafic-backend
+
+frameworkVersion: '3'
+
+custom:
+  appname: disgrafic
+plugins:
+  - serverless-python-requirements
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: dev
+  httpApi:
+    cors: true
+  region: us-east-2
+  environment:
+    DYNAMODB_TABLE_PRODUCT: ${self:custom.appname}-PRODUCT-${sls:stage}
+    DYNAMODB_TABLE_CLIENT: ${self:custom.appname}-CLIENT-${sls:stage}
+    REGION: ${aws:region}
+  iam: ${file(./resources/iam_roles/dynamo_role.yml)}
+
+package:
+  patterns:
+    - '!node_modules/**'
+    - '!env/**'
+    - '!README.md'
+    - '!package.json'
+    - '!package-lock.json'
+    - '!requirements.txt'
+
+functions:
+  - ${file(./resources/lambdas/client_api.yml)}
+  - ${file(./resources/lambdas/product_api.yml)}
+
+resources:
+  - ${file(./resources/db/db.yml)}
