@@ -6,7 +6,6 @@ from lib.models.Client import ClientModel
 
 
 def handler(event, context):
-    print(event['body'])
     data = json.loads(event['body'])
     isValid = ClientModel.isValid(data)
     if not isValid:
