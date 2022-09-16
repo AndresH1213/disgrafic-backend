@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 40
+    },
+    "price": {
+      "type": "number",
+      "minimum": 1
+    },
+    "product_type": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 20
+    },
+    "label": {
+      "type": "string"
+    }
+  },
+  "required": ["name", "price", "product_type", "label"]
+}
