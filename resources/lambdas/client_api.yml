@@ -1,0 +1,19 @@
+createClient:
+  handler: src/client/create.handler
+  events:
+    - httpApi: 'POST /client'
+
+listClients:
+  handler: src/client/list.handler
+  events:
+    - httpApi: 'GET /client'
+
+getClient:
+  handler: src/client/retrieve.handler
+  events:
+    - httpApi: 'GET /client/{id}'
+
+updateClient:
+  handler: src/client/update.handler
+  events:
+    - httpApi: 'PUT /client/{id}'
