@@ -1,0 +1,25 @@
+# ENDPOINTS FOR PRODUCTS
+createProduct:
+  handler: src/product/create.handler
+  events:
+    - httpApi: 'POST /product'
+
+listProducts:
+  handler: src/product/list.handler
+  events:
+    - httpApi: 'GET /product'
+
+getProduct:
+  handler: src/product/retrieve.handler
+  events:
+    - httpApi: 'GET /product/{id}'
+
+updateProduct:
+  handler: src/product/update.handler
+  events:
+    - httpApi: 'PUT /product/{id}'
+
+deleteProduct:
+  handler: src/product/delete.handler
+  events:
+    - httpApi: 'DELETE /product/{id}'
