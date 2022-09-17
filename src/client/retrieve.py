@@ -7,7 +7,9 @@ from lib.shared.response import send_response
 
 def handler(event, context):
     try:
-        found_client = ClientModel.get(hash_key=event['path']['id'])
+        found_client = ClientModel.get(
+            hash_key=event['pathParameters']['id']
+        )
     except DoesNotExist:
         error_response = json.dumps({'error_message': 'Client was not found'})
         return send_response(error_response, 404)

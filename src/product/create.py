@@ -1,6 +1,5 @@
 import json
 import logging
-from turtle import isvisible
 import uuid
 
 from lib.models.Product import ProductModel
@@ -8,8 +7,8 @@ from lib.shared.response import send_response
 
 
 def handler(event, context):
-    print(event['body'])
     data = json.loads(event['body'])
+
     isValid = ProductModel.isValid(data)
     if not isValid:
         logging.error('Validation Failed')

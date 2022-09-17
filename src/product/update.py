@@ -7,13 +7,11 @@ from lib.shared.response import send_response
 
 
 def handler(event, context):
-    # TODO: Figure out why this is behaving differently to the other endpoints
-    # data = json.loads(event['body'])
-    print(event['body'])
-    data = event['body']
+    product_id = event['pathParameters']['id']
+    data = json.loads(event['body'])
 
     try:
-        found_product = ProductModel.get(hash_key=event['path']['id'])
+        found_product = ProductModel.get(hash_key=product_id)
     except DoesNotExist:
         return {'statusCode': 404,
                 'body': json.dumps({'error_message': 'Product was not found'})}
