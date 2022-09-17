@@ -1,19 +1,22 @@
 import json
-
 from pynamodb.exceptions import DoesNotExist, DeleteError
+
 from lib.models.Product import ProductModel
+from lib.shared.response import send_response
 
 
 def handler(event, context):
     try:
         found_product = ProductModel.get(hash_key=event['path']['id'])
     except DoesNotExist:
-        return {'statusCode': 404,
-                'body': json.dumps({'error_message': 'Product was not found'})}
+        error_response = json.dumps({'error_message': 'Product was not found'})
+        return send_response(error_response, 404)
     try:
         found_product.delete()
     except DeleteError:
-        return {'statusCode': 400,
-                'body': json.dumps({'error_message': 'Unable to delete the Product'})}
+        error_response = json.dumps(
+            {'error_message': 'Unable to delete the Product'}
+        )
+        return send_response(error_response, 400)
 
-    return {'statusCode': 204}
+    return send_response("", 204)

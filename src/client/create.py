@@ -3,6 +3,7 @@ import logging
 import uuid
 
 from lib.models.Client import ClientModel
+from lib.shared.response import send_response
 
 
 def handler(event, context):
@@ -10,8 +11,10 @@ def handler(event, context):
     isValid = ClientModel.isValid(data)
     if not isValid:
         logging.error('Validation Failed')
-        return {'statusCode': 400,
-                'body': json.dumps({'error_message': 'Couldn\'t create the client item.'})}
+        body_response = json.dumps(
+            {'error_message': 'Couldn\'t create the client item.'}
+        )
+        return send_response(body_response, 400)
 
     new_client = ClientModel(client_id=str(uuid.uuid1()),
                              name=data['name'],
@@ -21,5 +24,4 @@ def handler(event, context):
 
     new_client.save()
 
-    return {'statusCode': 201,
-            'body': json.dumps(dict(new_client))}
+    return send_response(json.dumps(dict(new_client)), 201)

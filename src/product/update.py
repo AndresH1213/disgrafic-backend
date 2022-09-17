@@ -3,17 +3,14 @@ import logging
 
 from pynamodb.exceptions import DoesNotExist
 from lib.models.Product import ProductModel
+from lib.shared.response import send_response
 
 
 def handler(event, context):
     # TODO: Figure out why this is behaving differently to the other endpoints
     # data = json.loads(event['body'])
+    print(event['body'])
     data = event['body']
-
-    if 'text' not in data and 'checked' not in data:
-        logging.error('Validation Failed %s', data)
-        return {'statusCode': 422,
-                'body': json.dumps({'error_message': 'Couldn\'t update the product.'})}
 
     try:
         found_product = ProductModel.get(hash_key=event['path']['id'])
@@ -37,5 +34,4 @@ def handler(event, context):
     else:
         logging.info('Nothing changed did not update')
 
-    return {'statusCode': 200,
-            'body': json.dumps(dict(found_product))}
+    return send_response(json.dumps(dict(found_product)), 200)

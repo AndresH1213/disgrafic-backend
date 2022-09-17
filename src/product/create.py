@@ -4,6 +4,7 @@ from turtle import isvisible
 import uuid
 
 from lib.models.Product import ProductModel
+from lib.shared.response import send_response
 
 
 def handler(event, context):
@@ -12,8 +13,10 @@ def handler(event, context):
     isValid = ProductModel.isValid(data)
     if not isValid:
         logging.error('Validation Failed')
-        return {'statusCode': 400,
-                'body': json.dumps({'error_message': 'Couldn\'t create the product item.'})}
+        error_response = json.dumps(
+            {'error_message': 'Couldn\'t create the product item.'}
+        )
+        return send_response(error_response, 400)
 
     new_product = ProductModel(product_id=str(uuid.uuid1()),
                                product_type=data['product_type'],
@@ -24,5 +27,4 @@ def handler(event, context):
 
     new_product.save()
 
-    return {'statusCode': 201,
-            'body': json.dumps(dict(new_product))}
+    return send_response(json.dumps(dict(new_product)), 201)
