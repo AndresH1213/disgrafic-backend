@@ -11,10 +11,10 @@ def handler(event, context):
     isValid = ClientModel.isValid(data)
     if not isValid:
         logging.error('Validation Failed')
-        body_response = json.dumps(
+        error_response = json.dumps(
             {'error_message': 'Couldn\'t create the client item.'}
         )
-        return send_response(body_response, 400)
+        return send_response(error_response, 400)
 
     new_client = ClientModel(client_id=str(uuid.uuid1()),
                              name=data['name'],
