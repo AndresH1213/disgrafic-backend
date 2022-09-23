@@ -15,6 +15,9 @@
       "minLength": 3,
       "maxLength": 20
     },
+    "subtype": {
+      "type": "string"
+    },
     "label": {
       "type": "string"
     }
