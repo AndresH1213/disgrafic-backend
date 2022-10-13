@@ -17,12 +17,15 @@ def handler(event, context):
         )
         return send_response(error_response, 400)
 
+    image_url = data['image_url'] if 'image_url' in data else None
+
     new_product = ProductModel(product_id=str(uuid.uuid1()),
                                product_type=data['product_type'],
                                subtype=data['subtype'],
                                name=data['name'],
                                price=data['price'],
-                               label=data['label'])
+                               label=data['label'],
+                               image_url=image_url)
 
     new_product.save()
 
