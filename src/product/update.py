@@ -16,20 +16,12 @@ def handler(event, context):
         return {'statusCode': 404,
                 'body': json.dumps({'error_message': 'Product was not found'})}
 
-    product_changed = False
-    if 'name' in data and data['name'] != found_product.name:
-        found_product.name = data['name']
-        product_changed = True
-    if 'price' in data and data['price'] != found_product.price:
-        found_product.price = data['price']
-        product_changed = True
-    if 'label' in data and data['label'] != found_product.label:
-        found_product.label = data['label']
-        product_changed = True
+    [product_changed, update_product] = ProductModel.has_product_changed(
+        data, found_product)
 
     if product_changed:
-        found_product.save()
+        update_product.save()
     else:
         logging.info('Nothing changed did not update')
 
-    return send_response(json.dumps(dict(found_product)), 200)
+    return send_response(json.dumps(dict(update_product)), 200)
