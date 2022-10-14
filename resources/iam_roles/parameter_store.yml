@@ -1,0 +1,7 @@
+Effect: Allow
+Action:
+  - ssm:GetParameter
+  - ssm:GetParameters
+  - ssm:GetParametersByPath
+Resource:
+  - arn:aws:ssm:${aws:region}:${aws:accountId}:parameter/*
