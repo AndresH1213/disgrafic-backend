@@ -20,6 +20,7 @@ class Image:
         self.mime = body['mime'] if 'mime' in body else None
 
     def validate_mime_types(self):
+        print(self.mime)
         if self.mime not in self.ALLOWED_MIMES:
             logging.error('Incorrect mime type')
             self.errors.append("Mime type is not allowed")
