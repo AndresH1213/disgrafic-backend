@@ -1,0 +1,15 @@
+{
+  "name": "disgrafic-backend",
+  "version": "1.0.0",
+  "description": "Serverless application DISGRATIC LTDA.",
+  "author": "AndresH",
+  "license": "AFPL",
+  "scripts": {
+    "sls:dev": "serverless simulate apigateway --config serverless.dev.yml"
+  },
+  "devDependencies": {
+    "requests": "^0.3.0",
+    "serverless-plugin-simulate": "^0.0.17",
+    "serverless-python-requirements": "^5.4.0"
+  }
+}
