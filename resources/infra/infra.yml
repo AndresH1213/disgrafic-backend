@@ -1,0 +1,51 @@
+Resources:
+  ImageProductsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: ${self:provider.environment.BUCKET_UPLOAD_IMAGES}
+      AccessControl: PublicRead
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders: ['*']
+            AllowedMethods: ['GET', 'PUT', 'HEAD']
+            AllowedOrigins: ['*']
+            Id: AllowedCorsPublic
+            MaxAge: 3600
+
+  ClientsTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: client_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: client_id
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+      TableName: ${self:provider.environment.DYNAMODB_TABLE_CLIENT}
+  ProductsTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: product_id
+          AttributeType: S
+        - AttributeName: label
+          AttributeType: S
+        - AttributeName: createdAt
+          AttributeType: S
+      KeySchema:
+        - AttributeName: product_id
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: product_label_GSI
+          KeySchema:
+            - AttributeName: label
+              KeyType: HASH
+            - AttributeName: createdAt
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      BillingMode: PAY_PER_REQUEST
+      TableName: ${self:provider.environment.DYNAMODB_TABLE_PRODUCT}
