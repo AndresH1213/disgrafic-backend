@@ -1,8 +1,3 @@
-createClient:
-  handler: src/client/create.handler
-  events:
-    - httpApi: 'POST /client'
-
 listClients:
   handler: src/client/list.handler
   events:
@@ -13,7 +8,29 @@ getClient:
   events:
     - httpApi: 'GET /client/{id}'
 
+createClient:
+  handler: src/client/create.handler
+  events:
+    - httpApi:
+        path: /client
+        method: post
+        authorizer:
+          name: customAuth
+
 updateClient:
   handler: src/client/update.handler
   events:
-    - httpApi: 'PUT /client/{id}'
+    - httpApi:
+        path: /client/{id}
+        method: put
+        authorizer:
+          name: customAuth
+
+deleteClient:
+  handler: src/client/delete.handler
+  events:
+    - httpApi:
+        path: /client/{id}
+        method: delete
+        authorizer:
+          name: customAuth
