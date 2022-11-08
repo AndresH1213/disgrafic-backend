@@ -1,9 +1,4 @@
 # ENDPOINTS FOR PRODUCTS
-createProduct:
-  handler: src/product/create.handler
-  events:
-    - httpApi: 'POST /product'
-
 listProducts:
   handler: src/product/list.handler
   events:
@@ -14,12 +9,29 @@ getProduct:
   events:
     - httpApi: 'GET /product/{id}'
 
+createProduct:
+  handler: src/product/create.handler
+  events:
+    - httpApi:
+        path: /product
+        method: post
+        authorizer:
+          name: customAuth
+
 updateProduct:
   handler: src/product/update.handler
   events:
-    - httpApi: 'PUT /product/{id}'
+    - httpApi:
+        path: /product/{id}
+        method: put
+        authorizer:
+          name: customAuth
 
 deleteProduct:
   handler: src/product/delete.handler
   events:
-    - httpApi: 'DELETE /product/{id}'
+    - httpApi:
+        path: /product/{id}
+        method: delete
+        authorizer:
+          name: customAuth
