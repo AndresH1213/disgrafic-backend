@@ -1,0 +1,142 @@
+service: disgrafic-backend
+
+frameworkVersion: '3'
+
+custom:
+  appname: disgrafic
+  s3_arn: !GetAtt ImageProductsBucket.Arn
+  pythonRequirements:
+  dockerizePip: true
+
+plugins:
+  - serverless-python-requirements
+  - serverless-plugin-simulate
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: dev
+  region: us-east-2
+  http:
+    cors: true
+
+  environment:
+    DYNAMODB_TABLE_PRODUCT: ${self:custom.appname}-product-${sls:stage}
+    DYNAMODB_TABLE_CLIENT: ${self:custom.appname}-client-${sls:stage}
+    BUCKET_UPLOAD_IMAGES: ${self:custom.appname}-product-bucket-${sls:stage}
+    REGION: ${aws:region}
+  iam:
+    role:
+      statements:
+        - ${file(./resources/iam_roles/dynamo_role.yml)}
+        - ${file(./resources/iam_roles/bucket_role.yml)}
+        - ${file(./resources/iam_roles/parameter_store.yml)}
+
+functions:
+  listClients:
+    handler: src/client/list.handler
+    events:
+      - http:
+          method: get
+          path: client
+
+  getClient:
+    handler: src/client/retrieve.handler
+    events:
+      - http:
+          method: get
+          path: client/{id}
+
+  createClient:
+    handler: src/client/create.handler
+    events:
+      - http:
+          method: post
+          path: client
+
+  updateClient:
+    handler: src/client/update.handler
+    events:
+      - http:
+          method: put
+          path: client/{id}
+
+  deleteClient:
+    handler: src/client/delete.handler
+    events:
+      - http:
+          method: delete
+          path: client/{id}
+
+  listProducts:
+    handler: src/product/list.handler
+    events:
+      - http:
+          method: get
+          path: product
+
+  getProduct:
+    handler: src/product/retrieve.handler
+    events:
+      - http:
+          method: get
+          path: product/{id}
+
+  createProduct:
+    handler: src/product/create.handler
+    events:
+      - http:
+          method: post
+          path: product
+
+  updateProduct:
+    handler: src/product/update.handler
+    events:
+      - http:
+          path: product/{id}
+          method: put
+
+  deleteProduct:
+    handler: src/product/delete.handler
+    events:
+      - http:
+          path: product/{id}
+          method: delete
+
+  uploadImage:
+    handler: src/general/image_sign.handler
+    events:
+      - http:
+          path: image-sign
+          method: get
+
+  deleteImage:
+    handler: src/general/image_delete.handler
+    events:
+      - http:
+          path: image/{path}
+          method: delete
+
+  calculate:
+    handler: src/general/calculate.handler
+    events:
+      - http:
+          method: post
+          path: calculate
+
+  custom-auth:
+    handler: src/auth/authorizer.handler
+
+  getToken:
+    handler: src/auth/get_token.handler
+    events:
+      - http:
+          method: post
+          path: login
+
+  validateToken:
+    handler: src/auth/validate_token.handler
+    events:
+      - http:
+          method: get
+          path: login/validate
