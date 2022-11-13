@@ -1,0 +1,22 @@
+uploadImage:
+  handler: src/general/image_sign.handler
+  events:
+    - httpApi:
+        path: /image-sign
+        method: get
+        authorizer:
+          name: customAuth
+
+deleteImage:
+  handler: src/general/image_delete.handler
+  events:
+    - httpApi:
+        path: /image/{path}
+        method: delete
+        authorizer:
+          name: customAuth
+
+calculate:
+  handler: src/general/calculate.handler
+  events:
+    - httpApi: 'POST /calculate'

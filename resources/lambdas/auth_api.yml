@@ -1,0 +1,12 @@
+custom-auth:
+  handler: src/auth/authorizer.handler
+
+getToken:
+  handler: src/auth/get_token.handler
+  events:
+    - httpApi: 'POST /login'
+
+validateToken:
+  handler: src/auth/validate_token.handler
+  events:
+    - httpApi: 'GET /login/validate'
